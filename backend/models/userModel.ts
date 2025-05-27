@@ -3,7 +3,6 @@ import { IsNotEmpty, ValidateNested } from 'class-validator';
 import { Type } from 'class-transformer';
 import argon2 from 'argon2';
 import {
-  BaseEntity,
   Entity,
   PrimaryGeneratedColumn,
   Column,
@@ -21,8 +20,13 @@ enum UserRole {
   CUSTOMER = "customer"
 }
 
+enum UserGender {
+  Male = "male",
+  FEMALE = 'female'
+}
+
 @Entity("users")
-export class User extends BaseEntity {
+export class User {
   @PrimaryGeneratedColumn()
   id: number;
 
@@ -48,10 +52,16 @@ export class User extends BaseEntity {
   })
   role: UserRole
 
-  @Column()
+  @Column({
+    type: "enum",
+    enum: UserGender,
+  })
+  gender: UserGender;
+
+  @Column({ nullable: true })
   passwordResetToken: string;
 
-  @Column()
+  @Column({ nullable: true })
   passwordResetExpires: Date;
 
   @OneToMany(() => Order, (order) => order.user)
@@ -63,7 +73,7 @@ export class User extends BaseEntity {
     this.email = this.email.toLowerCase();
   }
 
-  async correctPassword(candidatePassword: string, userPassword: string): Promise<boolean> {
+  static async correctPassword(userPassword: string, candidatePassword: string): Promise<boolean> {
     return argon2.verify(userPassword, candidatePassword);
   }
 
