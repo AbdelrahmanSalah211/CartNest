@@ -1,4 +1,4 @@
-import { BaseEntity, Entity, Column, PrimaryGeneratedColumn, ManyToOne, ManyToMany, JoinTable } from "typeorm";
+import { Entity, Column, PrimaryGeneratedColumn, ManyToOne, ManyToMany, JoinTable } from "typeorm";
 import User from "./userModel";
 import Product from "./productModel";
 import { IsNotEmpty, ValidateNested } from 'class-validator';
@@ -11,7 +11,7 @@ enum OrderStatus {
 }
 
 @Entity("orders")
-class Order extends BaseEntity {
+class Order {
   @PrimaryGeneratedColumn()
   id: number;
 

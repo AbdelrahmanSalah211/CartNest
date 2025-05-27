@@ -1,10 +1,10 @@
-import { BaseEntity, Entity, Column, PrimaryGeneratedColumn, ManyToMany } from "typeorm";
+import { Entity, Column, PrimaryGeneratedColumn, ManyToMany } from "typeorm";
 import Order from "./orderModel";
 import { IsNotEmpty, ValidateNested } from 'class-validator';
 import { Type } from 'class-transformer';
 
 @Entity("products")
-class Product extends BaseEntity {
+class Product {
   @PrimaryGeneratedColumn()
   id: number;
 
