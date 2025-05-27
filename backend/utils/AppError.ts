@@ -6,7 +6,6 @@ interface TokenMetadata {
 }
 
 export class AppError extends Error {
-  message: string;
   statusCode: number;
   status: string;
   isOperational: boolean;
@@ -23,22 +22,22 @@ export class AppError extends Error {
   }
 }
 
-const handleCastErrorDB = (err: any): AppError => {
-  const message = `Invalid ${err.path}: ${err.value}.`;
-  return new AppError(message, 400);
-};
+// const handleCastErrorDB = (err: any): AppError => {
+//   const message = `Invalid ${err.path}: ${err.value}.`;
+//   return new AppError(message, 400);
+// };
 
 const handleDuplicateFieldsDB = (err: any): AppError => {
-  const field = Object.keys(err.keyValue)[0];
-  const message = `${field} already in use. please choose another`;
+  const field: string[] = err.detail.match(/Key \((.+?)\)=\((.+?)\)/);
+  const message = `${field[1]}: ${field[2]} already in use. please choose another`;
   return new AppError(message, 400);
 };
 
-const handleValidationErrorDB = (err: any): AppError => {
-  const errors = Object.values(err.errors).map((el: any) => el.message);
-  const message = `Invalid input data. ${errors.join('. ')}`;
-  return new AppError(message, 400);
-};
+// const handleValidationErrorDB = (err: any): AppError => {
+//   const errors = Object.values(err.errors).map((el: any) => el.message);
+//   const message = `Invalid input data. ${errors.join('. ')}`;
+//   return new AppError(message, 400);
+// };
 
 const handleJWTError = (tokenType: string = 'token'): AppError => 
   new AppError(`Invalid ${tokenType}.`, 401, { tokenType, errorType: 'invalid' });
@@ -62,7 +61,6 @@ const sendError = (err: any, res: Response): void => {
 
     res.status(err.statusCode).json(responseObj);
   } else {
-    console.error('error: ', err);
     res.status(500).json({
       status: 'error',
       message: 'Internal server error'
@@ -81,21 +79,23 @@ export const globalErrorHandling = (err: any, req: Request, res: Response, next:
   err.statusCode = err.statusCode || 500;
   err.status = err.status || "error";
 
-  let error: any = { ...err };
+  let error: any = Object.create(Object.getPrototypeOf(err));
+  Object.assign(error, err);
+
   error.message = err.message;
   error.tokenMetadata = err.tokenMetadata;
 
   const tokenType = determineTokenType(req);
   
-  if (error.name === "CastError") {
-    error = handleCastErrorDB(error);
-  }
-  if (error.code === 11000) {
+    // if (error.name === "CastError") {
+    //   error = handleCastErrorDB(error);
+    // }
+    if (error.code === '23505') {
     error = handleDuplicateFieldsDB(error);
   }
-  if (error.name === "ValidationError") {
-    error = handleValidationErrorDB(error);
-  }
+  // if (error.name === "ValidationError") {
+  //   error = handleValidationErrorDB(error);
+  // }
   if (error.name === "JsonWebTokenError") {
     error = handleJWTError(tokenType);
   }
