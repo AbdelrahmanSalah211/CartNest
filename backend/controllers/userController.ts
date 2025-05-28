@@ -46,7 +46,7 @@ const userController: UserInterface = {
     const { email, password } = req.body;
     const user = await UserRepository.findOne({
       where: { email },
-      select: ['id', 'username', 'email', 'photo', 'password']
+      select: ['id', 'username', 'email', 'photo', 'password', 'role']
     });
     if (!user){
       return next(new AppError('Invalid email or password', 401));
@@ -69,7 +69,8 @@ const userController: UserInterface = {
         id: user.id,
         username: user.username,
         email: user.email,
-        photo: user.photo
+        photo: user.photo,
+        role: user.role
       }
     });
   }),
