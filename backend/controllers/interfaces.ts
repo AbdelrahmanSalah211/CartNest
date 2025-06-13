@@ -13,20 +13,15 @@ export interface UserInterface {
 export interface OrderInterface {
   createOrder: RequestHandler,
   getAllOrders: RequestHandler,
-  getOrder: RequestHandler,
-  updateOrder: RequestHandler,
-  deleteOrder: RequestHandler,
+  rejectOrder: RequestHandler,
   approveOrder: RequestHandler,
-  deliverOrder: RequestHandler,
   cancelOrder: RequestHandler,
   getUserOrders: RequestHandler,
-  getUserOrder: RequestHandler,
 }
 
 export interface ProductInterface {
   createProduct: RequestHandler,
   getAllProducts: RequestHandler,
-  getProduct: RequestHandler,
   updateProduct: RequestHandler,
   deleteProduct: RequestHandler,
 }
