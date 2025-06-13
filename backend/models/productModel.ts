@@ -12,7 +12,7 @@ class Product {
   title: string;
 
   @Column()
-  body: string;
+  details: string;
 
   @Column()
   quantity: number;
@@ -26,11 +26,8 @@ class Product {
   @Column()
   deleteURL: string;
 
-  @Column()
+  @Column({ default: () => 'CURRENT_TIMESTAMP' })
   createdAt: Date;
-
-  @Column()
-  user: number;
 
   @ManyToMany(() => Order, (order) => order.products)
   orders: Order[];

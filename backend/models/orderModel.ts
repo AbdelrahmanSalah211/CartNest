@@ -4,10 +4,11 @@ import Product from "./productModel";
 import { IsNotEmpty, ValidateNested } from 'class-validator';
 import { Type } from 'class-transformer';
 
-enum OrderStatus {
+export enum OrderStatus {
   APPROVED = "approved",
   PENDING = "pending",
-  DELIVERED = "delivered",
+  REJECTED = "rejected",
+  CANCELLED = "cancelled"
 }
 
 @Entity("orders")
@@ -15,10 +16,10 @@ class Order {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column()
+  @Column({ default: 1 })
   quantity: number;
 
-  @Column({ default: new Date(Date.now()) })
+  @Column({ default: () => 'CURRENT_TIMESTAMP' })
   orderDate: Date;
 
   @Column({
