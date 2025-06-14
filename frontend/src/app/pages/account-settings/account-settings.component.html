@@ -1,0 +1,19 @@
+<form [formGroup]="form" (ngSubmit)="onSubmit()" class="space-y-4">
+  <div>
+    <label>Username</label>
+    <input formControlName="username" class="input input-bordered w-full" />
+  </div>
+  <div>
+    <label>Email</label>
+    <input formControlName="email" class="input input-bordered w-full" />
+  </div>
+  <div>
+    <label>Gender</label>
+    <select formControlName="gender" class="select select-bordered w-full">
+      <option value="">Select</option>
+      <option value="male">Male</option>
+      <option value="female">Female</option>
+    </select>
+  </div>
+  <button class="btn btn-primary w-full">Update</button>
+</form>

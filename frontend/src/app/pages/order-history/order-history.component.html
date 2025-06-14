@@ -1,0 +1,22 @@
+<div *ngIf="orders.length > 0; else noOrders">
+  <div *ngFor="let order of orders" class="flex flex-col border p-4 mb-2 rounded-md">
+    <div *ngFor="let product of order.products" class="flex flex-col items-center mb-2">
+      <img [src]="product.image" alt="Product Image" class="w-3/5 object-cover mr-2">
+      <div class="flex flex-col self-start px-2 pt-4">
+        <p><strong>Name:</strong> {{ product.title }}</p>
+        <p><strong>Description:</strong> {{ product.details }}</p>
+        <p><strong>Price:</strong> ${{ product.price }}</p>
+        <p><strong>Status:</strong> {{ order.status }}</p>
+      </div>
+    </div>
+    <button
+      *ngIf="order.status === 'pending'"
+      (click)="cancel(order.id)"
+      class="self-end px-4 py-1 bg-red-500 text-white rounded">
+      Cancel Order
+    </button>
+  </div>
+</div>
+<ng-template #noOrders>
+  <p class="text-center text-gray-500">No orders found.</p>
+</ng-template>

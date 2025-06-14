@@ -1,0 +1,57 @@
+
+
+<nav class="navbar bg-base-100 shadow-sm">
+  <div class="flex-1">
+    <a class="btn btn-ghost text-xl" routerLink="/home">CartNest</a>
+  </div>
+
+  <div class="flex items-center gap-4">
+    <a routerLink="/home" class="btn btn-ghost btn-sm">Home</a>
+    <a routerLink="/about" class="btn btn-ghost btn-sm">About</a>
+
+    <a *ngIf="!isLoggedIn" routerLink="/login" class="btn btn-ghost btn-sm">Login</a>
+    <a *ngIf="!isLoggedIn" routerLink="/register" class="btn btn-ghost btn-sm">Register</a>
+
+    <a *ngIf="isLoggedIn && (userRole === 'customer' || userRole === 'admin')" routerLink="/products" class="btn btn-ghost btn-sm">Products</a>
+    <a *ngIf="isLoggedIn && userRole === 'admin'" routerLink="/orders" class="btn btn-ghost btn-sm">Orders</a>
+
+    <button
+  *ngIf="isLoggedIn && userRole === 'customer'"
+  class="btn btn-circle btn-outline relative"
+  [routerLink]="'/checkout'"
+  aria-label="Cart"
+>
+  <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-primary" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+      d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2 9h12l-2-9M9 21a1 1 0 100-2 1 1 0 000 2zm6 0a1 1 0 100-2 1 1 0 000 2z"/>
+  </svg>
+
+  <ng-container *ngIf="(cartCount$ | async) as count">
+    <span
+      class="badge badge-primary badge-sm absolute -top-2 -right-2"
+      *ngIf="count > 0"
+    >
+      {{ count }}
+    </span>
+  </ng-container>
+</button>
+
+    <div *ngIf="isLoggedIn && userPhoto" class="dropdown dropdown-end">
+      <div tabindex="0" role="button" class="btn btn-ghost btn-circle avatar">
+        <div class="w-10 rounded-full">
+          <img [src]="userPhoto" alt="User Photo" />
+        </div>
+      </div>
+      <ul class="menu menu-sm dropdown-content bg-base-100 rounded-box z-1 mt-3 w-52 p-2 shadow">
+        <!-- <li><a>Profile</a></li> -->
+        <li><a routerLink="/profile">Profile</a></li>
+        <!-- <li><a>Settings</a></li> -->
+        <li><button (click)="authService.logout()">Logout</button></li>
+      </ul>
+    </div>
+  </div>
+</nav>
+
+<main>
+  <router-outlet></router-outlet>
+</main>

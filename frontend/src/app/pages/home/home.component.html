@@ -1,0 +1,20 @@
+<div class="px-10 md:px-20 xl:px-40">
+  <h1 class="text-3xl text-center font-bold text-pink-600 mb-6">🔥 Promotional Products</h1>
+
+  <div *ngFor="let product of promotionalProducts" class="card shadow-xl border border-pink-400 p-5 mb-6 rounded bg-pink-50">
+    <div class="flex gap-4 justify-around">
+      <img [src]="product.image" alt="Image" class="rounded mb-2 w-1/2 aspect-2/1 border border-pink-200">
+      <div class="flex flex-col items-start gap-2 w-1/2">
+        <h2 class="text-xl font-bold text-pink-700">{{ product.title }}</h2>
+        <p>{{ product.body }}</p>
+        <p class="text-sm text-gray-600">{{ product.details }}</p>
+        <p class="text-lg text-pink-600 font-bold">${{ product.price }}</p>
+        <button class="btn btn-secondary mt-2 self-end justify-self-end" (click)="addToCart(product)">Add to Cart</button>
+      </div>
+    </div>
+  </div>
+
+  <div *ngIf="loading" class="text-center">
+    <span class="loading loading-spinner text-pink-500"></span>
+  </div>
+</div>

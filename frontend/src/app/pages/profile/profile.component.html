@@ -1,0 +1,22 @@
+<div class="text-blue-700 text-center py-10 text-5xl font-extrabold animate-bounce">
+  CartNest
+</div>
+
+<div class="flex flex-col items-center mt-6">
+  <img [src]="user?.photo" class="w-32 h-32 rounded-full border-4 border-white object-cover cursor-pointer" (click)="triggerFileInput()" />
+  <input type="file" class="hidden" #fileInput (change)="onPhotoChange($event)" />
+  <h2 class="text-2xl mt-2">{{ user?.username }}</h2>
+  <p class="text-gray-500">{{ user?.email }}</p>
+</div>
+
+<div class="mt-6 flex justify-center space-x-6 text-lg font-semibold pb-2">
+  <button (click)="activeTab='settings'" [class.border-b-4]="activeTab==='settings'">Account Settings</button>
+  <button (click)="activeTab='password'" [class.border-b-4]="activeTab==='password'">Password Change</button>
+  <button (click)="activeTab='orders'" [class.border-b-4]="activeTab==='orders'">Order History</button>
+</div>
+
+<div class="p-4 flex flex-col items-center">
+  <app-account-settings class="w-2/5" *ngIf="activeTab === 'settings'" [user]="user"></app-account-settings>
+  <app-password-change class="w-2/5" *ngIf="activeTab === 'password'"></app-password-change>
+  <app-order-history class="w-2/5" *ngIf="activeTab === 'orders'"></app-order-history>
+</div>
