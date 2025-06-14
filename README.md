@@ -60,7 +60,7 @@
 
 2. **Configure environment variables:**
 
-   - Create a `.env` file in `Backend/` and have:
+   - Create a `.env` file in `backend/` and have:
      ```
      PORT=
      JWT_SECRET=
