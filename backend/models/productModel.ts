@@ -1,4 +1,4 @@
-import { Entity, Column, PrimaryGeneratedColumn, ManyToMany } from "typeorm";
+import { Entity, Column, PrimaryGeneratedColumn, ManyToMany, CreateDateColumn, DeleteDateColumn } from "typeorm";
 import Order from "./orderModel";
 import { IsNotEmpty, ValidateNested } from 'class-validator';
 import { Type } from 'class-transformer';
@@ -26,8 +26,11 @@ class Product {
   @Column()
   deleteURL: string;
 
-  @Column({ default: () => 'CURRENT_TIMESTAMP' })
+  @CreateDateColumn()
   createdAt: Date;
+
+  @DeleteDateColumn()
+  deletedAt: Date;
 
   @ManyToMany(() => Order, (order) => order.products)
   orders: Order[];

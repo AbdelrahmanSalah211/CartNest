@@ -1,4 +1,4 @@
-import { Entity, Column, PrimaryGeneratedColumn, ManyToOne, ManyToMany, JoinTable } from "typeorm";
+import { Entity, Column, PrimaryGeneratedColumn, ManyToOne, ManyToMany, JoinTable, CreateDateColumn } from "typeorm";
 import User from "./userModel";
 import Product from "./productModel";
 import { IsNotEmpty, ValidateNested } from 'class-validator';
@@ -28,6 +28,12 @@ class Order {
     default: OrderStatus.PENDING,
   })
   status: OrderStatus;
+
+  @Column({ type: "decimal", precision: 10, scale: 2 })
+  totalPrice: number;
+
+  @CreateDateColumn()
+  createdAt: Date;
 
   @ManyToOne(() => User, (user) => user.orders)
   user: User;
