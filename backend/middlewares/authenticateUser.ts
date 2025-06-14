@@ -33,7 +33,6 @@ export const authenticateUser = catchAsync(async (req: Request, res: Response, n
     if (!user) {
       return next(new AppError('The user belonging to this token no longer exists', 401));
     }
-    console.log('User authenticated:', user);
     req.user = {
       id: user.id,
       role: user.role
