@@ -20,9 +20,11 @@ const orderController: OrderInterface = {
     const order = await AppDataSource.transaction('SERIALIZABLE', async transactionalEntityManager => {
       const user = await transactionalEntityManager.findOne(User, { where: { id } });
       const productsData = await transactionalEntityManager.find(Product, { where: { id: In(productsIds) } });
+      const totalPrice = productsData.reduce((acc: number, product: any) => acc + product.price, 0);
       const order = transactionalEntityManager.create(Order, {
         user,
-        products: productsData
+        products: productsData,
+        totalPrice
       });
       await transactionalEntityManager.save(order);
       await transactionalEntityManager.decrement(Product, { id: In(productsIds) }, "quantity", 1);
