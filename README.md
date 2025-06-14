@@ -46,7 +46,7 @@
 
 **Backend:**
 
-- Typescript Express v5 - JsonWebToken - CORS - PostgreSQL - TypeORM - [argon2](https://github.com/P-H-C/phc-winner-argon2) 
+- Typescript Express v5 - JsonWebToken - CORS - PostgreSQL - TypeORM - [argon2](https://github.com/P-H-C/phc-winner-argon2) (password hashing)
 
 
 ## Backend Setup
