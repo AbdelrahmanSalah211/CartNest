@@ -11,7 +11,6 @@ export const ProductRepository = AppDataSource.getRepository(Product);
 const productController: ProductInterface = {
   createProduct: catchAsync(async (req: Request, res: Response, next: NextFunction) => {
     const { title, details, quantity, price } = req.body;
-
     const image = req.file ? req.file.buffer.toString('base64') : null;
 
     const product = new Product();
@@ -46,7 +45,6 @@ const productController: ProductInterface = {
     });
   }),
 
-
   getAllProducts: catchAsync(async (req: Request, res: Response, next: NextFunction) => {
     const productsQB = AppDataSource.getRepository(Product).createQueryBuilder('product');
 
@@ -72,16 +70,16 @@ const productController: ProductInterface = {
   updateProduct: catchAsync(async (req: Request, res: Response, next: NextFunction) => {
     const { title, details, quantity, price } = req.body;
     const { productId } = req.params;
-    const Product = await ProductRepository.findOne({
+    const product = await ProductRepository.findOne({
       where: { id: parseInt(productId, 10) }
     });
-    if (!Product) {
+    if (!product) {
       return next(new AppError('Product not found', 404));
     }
-    Product.title = title;
-    Product.details = details;
-    Product.quantity = quantity;
-    Product.price = price;
+    product.title = title || product.title;
+    product.details = details || product.details;
+    product.quantity = quantity || product.quantity;
+    product.price = price || product.price;
     if(req.file){
       const file = req.file.buffer.toString('base64');
       const formData = new FormData();
@@ -96,8 +94,8 @@ const productController: ProductInterface = {
         return next(new AppError('Product not updated', 500));
       }
       const { data } = await response.json();
-      if(Product.deleteURL){
-        const deleteResponse = await fetch(Product.deleteURL, {
+      if(product.deleteURL){
+        const deleteResponse = await fetch(product.deleteURL, {
           method: 'GET',
           headers: {
             'Content-Type': 'application/json'
@@ -107,33 +105,33 @@ const productController: ProductInterface = {
           return next(new AppError('Product not updated', 500));
         }
       }
-      Product.image = data.display_url;
-      Product.deleteURL = data.delete_url;
+      product.image = data.display_url;
+      product.deleteURL = data.delete_url;
     }
-    await  ProductRepository.save(Product);
+    await ProductRepository.save(product);
     return res.status(200).json({
       status: 'success',
       data: {
-        Product
+        product
       }
     });
   }),
 
   deleteProduct: catchAsync(async (req: Request, res: Response, next: NextFunction) => {
     const { productId } = req.params;
-    const Product = await ProductRepository.findOne({
+    const product = await ProductRepository.findOne({
       where: { id: parseInt(productId, 10) }
     });
-    if (!Product) {
+    if (!product) {
       return next(new AppError('Product not found', 404));
     }
-    const deleteResponse = await fetch(Product.deleteURL, {
+    const deleteResponse = await fetch(product.deleteURL, {
       method: 'GET'
     });
-    if (!deleteResponse.ok) {
+    if (deleteResponse.status !== 200) {
       return next(new AppError('Image not deleted', 404));
     }
-    const deletedProduct = await ProductRepository.delete({ id: parseInt(productId, 10) });
+    const deletedProduct = await ProductRepository.softDelete({ id: parseInt(productId, 10) });
     if (!deletedProduct) {
       return next(new AppError('Product not deleted', 404));
     }
