@@ -20,7 +20,7 @@ router
   );
 
 router
-  .route("/:postId")
+  .route("/:productId")
   .patch(
     upload.single('image'),
     authenticateUser,
