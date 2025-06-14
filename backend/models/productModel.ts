@@ -1,4 +1,4 @@
-import { Entity, Column, PrimaryGeneratedColumn, ManyToMany } from "typeorm";
+import { Entity, Column, PrimaryGeneratedColumn, ManyToMany, CreateDateColumn, DeleteDateColumn } from "typeorm";
 import Order from "./orderModel";
 import { IsNotEmpty, ValidateNested } from 'class-validator';
 import { Type } from 'class-transformer';
@@ -12,7 +12,7 @@ class Product {
   title: string;
 
   @Column()
-  body: string;
+  details: string;
 
   @Column()
   quantity: number;
@@ -26,11 +26,11 @@ class Product {
   @Column()
   deleteURL: string;
 
-  @Column()
+  @CreateDateColumn()
   createdAt: Date;
 
-  @Column()
-  user: number;
+  @DeleteDateColumn()
+  deletedAt: Date;
 
   @ManyToMany(() => Order, (order) => order.products)
   orders: Order[];

@@ -1,5 +1,5 @@
 require('dotenv').config();
-import express, { Express } from 'express';
+import express, { Express, Request, Response } from 'express';
 import cors from 'cors';
 import morgan from 'morgan';
 import cookieParser from 'cookie-parser';
@@ -8,7 +8,8 @@ import dbConnection from './config/database';
 import { globalErrorHandling } from './utils/AppError';
 import { Server } from 'http';
 import userRoutes from './routes/userRoutes';
-// import productRoutes from './routes/productRoutes';
+import productRoutes from './routes/productRoutes';
+import orderRoutes from './routes/orderRoutes';
 
 
 dbConnection().then(() => {
@@ -32,7 +33,15 @@ app.use(express.json());
 app.use(morgan('dev'));
 
 app.use("/api/v1/users", userRoutes);
-// app.use("/api/v1/products", productRoutes);
+app.use("/api/v1/products", productRoutes);
+app.use("/api/v1/orders", orderRoutes);
+
+app.all("{*splat}", (req: Request, res: Response) => {
+  res.status(404).json({
+    status: 'fail',
+    message: `Cannot find ${req.originalUrl} on this server`
+  });
+});
 
 app.use(globalErrorHandling);
 
