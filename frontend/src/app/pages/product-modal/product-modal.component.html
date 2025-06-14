@@ -1,0 +1,29 @@
+<div *ngIf="(modal$ | async) as modal">
+  <div *ngIf="modal.type" class="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
+    <div class="bg-white p-6 rounded-lg w-[90%] max-w-xl">
+      <h2 class="text-xl font-semibold mb-4">
+        {{ modal.type === 'create' ? 'Create Product' : 'Edit Product' }}
+      </h2>
+
+      <form [formGroup]="form" (ngSubmit)="submit(modal.type!, modal.data)">
+        <label class="label">Product Title</label>
+        <input type="text" formControlName="title" placeholder="Title" class="input input-bordered w-full mb-2" />
+        <label class="label">Product Details</label>
+        <textarea formControlName="details" placeholder="Details" class="textarea textarea-bordered w-full mb-2"></textarea>
+        <label class="label">Product Quantity</label>
+        <input type="number" formControlName="quantity" placeholder="Quantity" class="input input-bordered w-full mb-2" />
+        <label class="label">Product Price</label>
+        <input type="number" formControlName="price" placeholder="Price" class="input input-bordered w-full mb-2" />
+        <label class="label">Product Image</label>
+        <input type="file" (change)="onFileChange($event)" class="file-input w-full mb-2" />
+
+        <div class="flex justify-end gap-2">
+          <button type="button" (click)="close()" class="btn btn-ghost">Cancel</button>
+          <button type="submit" class="btn btn-primary" [disabled]="isSubmitting">
+            {{ modal.type === 'create' ? 'Create' : 'Update' }}
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

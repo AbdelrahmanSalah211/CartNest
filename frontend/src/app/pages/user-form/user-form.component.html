@@ -1,0 +1,129 @@
+<div class="flex flex-col md:flex-row h-screen">
+  <div class="bg-gray-100 flex flex-col justify-center items-center md:w-1/2 p-8">
+    <h1 class="text-6xl text-blue-700 font-bold mb-4">CartNest</h1>
+    <p class="text-center text-gray-700 text-sm max-w-xs">
+      Welcome to <strong class="text-blue-700">CartNest</strong> your go-to e-commerce platform for the latest products at unbeatable prices. Shop with confidence and style!
+    </p>
+  </div>
+
+  <div class="flex flex-col justify-center items-center gap-6 p-4 shadow-xl md:w-1/2">
+    <h2 class="text-2xl font-bold">{{ isRegister ? 'Sign Up' : 'Sign In' }}</h2>
+
+    <p *ngIf="errMsg" class="text-sm text-red-700 font-semibold">{{ errMsg }}</p>
+
+    <form [formGroup]="form" (ngSubmit)="onSubmit()" class="flex flex-col gap-4 w-64">
+      <div class="form-control w-full" *ngIf="isRegister">
+        <label for="username" class="label">Username:</label>
+        <input
+          type="text"
+          id="username"
+          formControlName="username"
+          required
+          (focus)="usernameFocus = true"
+          (blur)="usernameFocus = false"
+          class="input input-bordered input-sm w-full"
+        />
+        <p
+          *ngIf="usernameFocus && f['username'].value && f['username'].value.length < 4"
+          class="mt-1 text-xs p-2 rounded bg-black text-white"
+        >
+          Must be at least 4 characters long.
+        </p>
+      </div>
+
+      <div class="form-control w-full">
+        <label for="email" class="label">Email:</label>
+        <input
+          type="email"
+          id="email"
+          formControlName="email"
+          required
+          (focus)="emailFocus = true"
+          (blur)="emailFocus = false"
+          class="input input-bordered input-sm w-full"
+        />
+        <p
+          *ngIf="isRegister && emailFocus && f['email'].invalid && f['email'].value"
+          class="mt-1 text-xs p-2 rounded bg-black text-white"
+        >
+          Must be a valid email address.
+        </p>
+      </div>
+
+      <div class="form-control w-full">
+        <label for="password" class="label">Password:</label>
+        <input
+          type="password"
+          id="password"
+          formControlName="password"
+          required
+          (focus)="passwordFocus = true"
+          (blur)="passwordFocus = false"
+          class="input input-bordered input-sm w-full"
+        />
+        <p
+          *ngIf="isRegister && passwordFocus && f['password'].invalid"
+          class="mt-1 text-xs p-2 rounded bg-black text-white"
+        >
+          Must contain 1 uppercase, 1 lowercase, 1 special character and be at least 8 characters long.
+        </p>
+        <a *ngIf="!isRegister" class="text-blue-600 underline" routerLink="/forgetpassword">Forgot Password?</a>
+      </div>
+
+      <div class="form-control w-full" *ngIf="isRegister">
+        <label for="match-password" class="label">Confirm Password:</label>
+        <input
+          type="password"
+          id="match-password"
+          formControlName="matchPassword"
+          required
+          (focus)="matchFocus = true"
+          (blur)="matchFocus = false"
+          class="input input-bordered input-sm w-full"
+        />
+        <p
+          *ngIf="matchFocus && f['matchPassword'].value && f['matchPassword'].value !== f['password'].value"
+          class="mt-1 text-xs p-2 rounded bg-black text-white"
+        >
+          Must match password.
+        </p>
+      </div>
+
+      <div class="form-control w-full" *ngIf="isRegister">
+        <label for="gender" class="label">Gender:</label>
+        <select id="gender" formControlName="gender" class="select select-bordered select-sm w-full" required>
+          <option value="" disabled selected>Select gender</option>
+          <option value="male">Male</option>
+          <option value="female">Female</option>
+        </select>
+      </div>
+
+      <div class="form-control w-full" *ngIf="isRegister">
+        <label for="photo" class="label">Profile Photo:</label>
+        <input
+          type="file"
+          id="photo"
+          (change)="onFileSelected($event)"
+          accept="image/*"
+          class="file-input file-input-bordered file-input-sm w-full"
+        />
+      </div>
+
+      <button
+        type="submit"
+        [disabled]="isRegister && (f['username'].value.length < 4 || f['email'].invalid || f['password'].invalid || f['password'].value !== f['matchPassword'].value)"
+        class="btn btn-primary"
+      >
+        {{ isRegister ? 'Sign Up' : 'Sign In' }}
+      </button>
+    </form>
+
+    <p class="text-sm text-center">
+      {{ isRegister ? 'Already registered?' : 'Not registered yet?' }}
+      <br />
+      <a (click)="toggleMode()" class="text-blue-600 underline cursor-pointer">
+        {{ isRegister ? 'Sign In' : 'Sign Up' }}
+      </a>
+    </p>
+  </div>
+</div>
